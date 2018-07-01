@@ -6,13 +6,16 @@ public class Player : MonoBehaviour {
 	public float horizontalVelocity;
 	public float jumpVelocity;
 	public float fallMultiplier = 2.5f;
+	
 	private Animator animator;
 	private Rigidbody2D rb;
+	private SpriteRenderer sp;
 
 	// Use this for initialization
 	void Awake () {
 		animator = GetComponent<Animator>( );
 		rb = GetComponent<Rigidbody2D>( );
+		sp = GetComponent<SpriteRenderer>( );
 	}
 	
 	// Update is called once per frame
@@ -21,6 +24,13 @@ public class Player : MonoBehaviour {
 		transform.Translate( horizontalMove, 0, 0 );
 
 		if( Input.GetButtonDown( "Horizontal" ) ) {
+			if( Input.GetAxisRaw( "Horizontal" ) >= 0 ) {
+				sp.flipX = false;
+			}
+			else { 
+				sp.flipX = true;
+			}
+
 			animator.SetBool( "playerRun", true );
 		}
 		else if( Input.GetButtonUp( "Horizontal" ) ) {
