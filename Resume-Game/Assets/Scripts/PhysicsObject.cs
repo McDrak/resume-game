@@ -5,6 +5,7 @@ using UnityEngine;
 public class PhysicsObject : MonoBehaviour {
 	public float gravityModifier = 1f;
 	public float minGroundNormalY = 0.65f;
+	public float fallMultiplier = 2.5f;
 
 	protected const float minMoveDistance = 0.001f;
 	protected RaycastHit2D[ ] hitBuffer = new RaycastHit2D[ 16 ];
@@ -35,6 +36,10 @@ public class PhysicsObject : MonoBehaviour {
 	}
 
 	void FixedUpdate( ) {
+		gravityModifier = 1f;
+		if( velocity.y < 0 ) {
+			gravityModifier += 1.5f;
+		}
 		velocity += gravityModifier * Physics2D.gravity * Time.deltaTime;
 		velocity.x = targetVelocity.x;
 
