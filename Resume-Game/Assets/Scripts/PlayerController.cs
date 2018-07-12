@@ -9,11 +9,14 @@ public class PlayerController : PhysicsObject {
 	private SpriteRenderer sr;
 	private Animator animator;
 	private bool canDoubleJump;
+	private Vector2 lastCheckpoint;
+	private bool canRaise;
 
 	void Awake( ) {
 		sr = GetComponent<SpriteRenderer>( );
 		animator = GetComponent<Animator>( );
 		canDoubleJump = false;
+		canRaise = true;
 	}
 
 	protected override void ComputeVelocity( ) {
@@ -39,7 +42,31 @@ public class PlayerController : PhysicsObject {
 
 		animator.SetBool( "playerGrounded", grounded );
 		animator.SetFloat( "playerVelocityX", Mathf.Abs( velocity.x ) / maxSpeed );
+		animator.SetFloat( "playerVelocityY", velocity.y );
 
 		targetVelocity = move * maxSpeed;
+	}
+
+	void OnTriggerEnter2D( Collider2D other ) {
+		if( other.tag == "Spike" ) {
+			animator.SetTrigger( "playerDeath" );
+			StartCoroutine( respawnDelay( ) );
+		}
+		else if( other.tag == "Checkpoint" ) {
+			lastCheckpoint = new Vector2( other.transform.position.x, other.transform.position.y );
+		}
+		else if( other.tag == "HeightMod" ) {
+			if( canRaise ) {
+				canRaise = false;
+			}
+			else {
+				canRaise = true;
+			}
+		}
+	}
+
+	IEnumerator respawnDelay(  ) {
+		yield return new WaitForSeconds( 1.5f );
+		transform.position = new Vector2( lastCheckpoint.x, lastCheckpoint.y );
 	}
 }
