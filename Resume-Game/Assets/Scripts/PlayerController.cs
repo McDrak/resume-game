@@ -5,6 +5,8 @@ using UnityEngine;
 public class PlayerController : PhysicsObject {
 	public float jumpTakeOffSpeed = 7f;
 	public float maxSpeed = 7f;
+	public Cinemachine.CinemachineVirtualCamera mainCam;
+	public Cinemachine.CinemachineVirtualCamera upperCam;
 
 	private SpriteRenderer sr;
 	private Animator animator;
@@ -57,9 +59,11 @@ public class PlayerController : PhysicsObject {
 		}
 		else if( other.tag == "HeightMod" ) {
 			if( canRaise ) {
+				upperCam.gameObject.SetActive( true );
 				canRaise = false;
 			}
 			else {
+				upperCam.gameObject.SetActive( false );
 				canRaise = true;
 			}
 		}
@@ -67,6 +71,8 @@ public class PlayerController : PhysicsObject {
 
 	IEnumerator respawnDelay(  ) {
 		yield return new WaitForSeconds( 1.5f );
+		upperCam.gameObject.SetActive( false );
+		canRaise = true;
 		transform.position = new Vector2( lastCheckpoint.x, lastCheckpoint.y );
 	}
 }
