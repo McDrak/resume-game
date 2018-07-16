@@ -5,14 +5,15 @@ using UnityEngine;
 public class PlayerController : PhysicsObject {
 	public float jumpTakeOffSpeed = 7f;
 	public float maxSpeed = 7f;
-	public Cinemachine.CinemachineVirtualCamera mainCam;
 	public Cinemachine.CinemachineVirtualCamera upperCam;
+	public GameObject[ ] boxes = new GameObject[ 3 ];
 
 	private SpriteRenderer sr;
 	private Animator animator;
 	private bool canDoubleJump;
 	private Vector2 lastCheckpoint;
 	private bool canRaise;
+	private float collectibleCounter;
 
 	void Awake( ) {
 		sr = GetComponent<SpriteRenderer>( );
@@ -67,9 +68,20 @@ public class PlayerController : PhysicsObject {
 				canRaise = true;
 			}
 		}
+		else if( other.tag == "Collectible" ) {
+			collectibleCounter++;
+			other.GetComponent<Animator>( ).SetTrigger( "gemTaken" );
+			Destroy( other.gameObject, 0.6f );
+
+			if( collectibleCounter == 5 ) {
+				for( int i = 0; i < boxes.Length; i++ ) {
+					Destroy( boxes[ i ] );
+				}
+			}
+		}
 	}
 
-	IEnumerator respawnDelay(  ) {
+	IEnumerator respawnDelay( ) {
 		yield return new WaitForSeconds( 1.5f );
 		upperCam.gameObject.SetActive( false );
 		canRaise = true;
