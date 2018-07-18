@@ -7,19 +7,20 @@ public class PlayerController : PhysicsObject {
 	public float maxSpeed = 7f;
 	public Cinemachine.CinemachineVirtualCamera upperCam;
 	public GameObject[ ] boxes = new GameObject[ 3 ];
+	public float collectibleCounter;
 
 	private SpriteRenderer sr;
 	private Animator animator;
 	private bool canDoubleJump;
 	private Vector2 lastCheckpoint;
 	private bool canRaise;
-	private float collectibleCounter;
 
 	void Awake( ) {
 		sr = GetComponent<SpriteRenderer>( );
 		animator = GetComponent<Animator>( );
 		canDoubleJump = false;
 		canRaise = true;
+		collectibleCounter = 0;
 	}
 
 	protected override void ComputeVelocity( ) {
