@@ -10,6 +10,7 @@ public class PhysicsObject : MonoBehaviour {
 	protected RaycastHit2D[ ] hitBuffer = new RaycastHit2D[ 16 ];
 	protected List<RaycastHit2D> hitBufferList = new List<RaycastHit2D>( 16 );
 	protected const float shellRadius = 0.01f;
+	protected bool movementLocked = false;
 	protected Vector2 velocity;
 	protected Rigidbody2D rb2d;
 	protected ContactFilter2D contactFilter;
@@ -43,7 +44,9 @@ public class PhysicsObject : MonoBehaviour {
 		Vector2 deltaPosition = velocity * Time.deltaTime;
 		Vector2 moveAlongGround = new Vector2( groundNormal.y, -groundNormal.x );
 		Vector2 move = moveAlongGround * deltaPosition.x;
-		Movement( move, false );
+		if( !movementLocked ) {
+			Movement( move, false );
+		}
 		move = Vector2.up * deltaPosition.y;
 		Movement( move, true );
 	}

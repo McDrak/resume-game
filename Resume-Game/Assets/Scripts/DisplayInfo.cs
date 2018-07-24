@@ -69,6 +69,17 @@ public class DisplayInfo : MonoBehaviour {
 						displayInfo = false;
 					}
 					break;
+
+					case "ThePromiseTitle": {
+						Application.OpenURL( "https://github.com/mcdrak/the-promise" );
+						displayInfo = false;
+					}
+					break;
+
+					case "Destino48Title": {
+						txt = "Coming Soon";
+					}
+					break;
 				}
 			}
 			else {

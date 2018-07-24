@@ -24,35 +24,38 @@ public class PlayerController : PhysicsObject {
 	}
 
 	protected override void ComputeVelocity( ) {
-		Vector2 move = Vector2.zero;
-		move.x = Input.GetAxis( "Horizontal" );
+		if( !movementLocked ) {
+			Vector2 move = Vector2.zero;
+			move.x = Input.GetAxis( "Horizontal" );
 
-		if( Input.GetButtonDown( "Jump" ) && grounded ) {
-			velocity.y = jumpTakeOffSpeed;
-			canDoubleJump = true;
-			animator.SetTrigger( "playerJump" );
+			if( Input.GetButtonDown( "Jump" ) && grounded ) {
+				velocity.y = jumpTakeOffSpeed;
+				canDoubleJump = true;
+				animator.SetTrigger( "playerJump" );
+			}
+			else if ( Input.GetButtonDown( "Jump" ) && canDoubleJump ) {
+				canDoubleJump = false;
+				velocity.y = 0;
+				velocity.y = jumpTakeOffSpeed;
+				animator.SetTrigger( "playerSommer" );
+			}
+
+			bool flipSprite = ( sr.flipX ? ( move.x > 0.01f ) : ( move.x < -0.01f ) );
+			if( flipSprite ) {
+				sr.flipX = !sr.flipX;
+			}
+
+			animator.SetBool( "playerGrounded", grounded );
+			animator.SetFloat( "playerVelocityX", Mathf.Abs( velocity.x ) / maxSpeed );
+			animator.SetFloat( "playerVelocityY", velocity.y );
+
+			targetVelocity = move * maxSpeed;
 		}
-		else if ( Input.GetButtonDown( "Jump" ) && canDoubleJump ) {
-			canDoubleJump = false;
-			velocity.y = 0;
-			velocity.y = jumpTakeOffSpeed;
-			animator.SetTrigger( "playerSommer" );
-		}
-
-		bool flipSprite = ( sr.flipX ? ( move.x > 0.01f ) : ( move.x < -0.01f ) );
-		if( flipSprite ) {
-			sr.flipX = !sr.flipX;
-		}
-
-		animator.SetBool( "playerGrounded", grounded );
-		animator.SetFloat( "playerVelocityX", Mathf.Abs( velocity.x ) / maxSpeed );
-		animator.SetFloat( "playerVelocityY", velocity.y );
-
-		targetVelocity = move * maxSpeed;
 	}
 
 	void OnTriggerEnter2D( Collider2D other ) {
 		if( other.tag == "Spike" ) {
+			movementLocked = true;
 			animator.SetTrigger( "playerDeath" );
 			StartCoroutine( respawnDelay( ) );
 		}
@@ -83,9 +86,10 @@ public class PlayerController : PhysicsObject {
 	}
 
 	IEnumerator respawnDelay( ) {
-		yield return new WaitForSeconds( 1.5f );
+		yield return new WaitForSeconds( 1.2f );
 		upperCam.gameObject.SetActive( false );
 		canRaise = true;
 		transform.position = new Vector2( lastCheckpoint.x, lastCheckpoint.y );
+		movementLocked = false;
 	}
 }
