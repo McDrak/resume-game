@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
+using System.Runtime.InteropServices;
 
 public class DisplayInfo : MonoBehaviour {
 	public GameObject banner;
@@ -65,13 +66,17 @@ public class DisplayInfo : MonoBehaviour {
 					break;
 
 					case "TesisTitle": {
-						Application.OpenURL( "https://github.com/mcdrak/tesis" );
+						#if !UNITY_EDITOR
+						openWindow( "https://github.com/mcdrak/tesis" );
+						#endif
 						displayInfo = false;
 					}
 					break;
 
 					case "ThePromiseTitle": {
-						Application.OpenURL( "https://github.com/mcdrak/the-promise" );
+						#if !UNITY_EDITOR
+						openWindow( "https://github.com/mcdrak/the-promise" );
+						#endif
 						displayInfo = false;
 					}
 					break;
@@ -98,4 +103,7 @@ public class DisplayInfo : MonoBehaviour {
 			banner.SetActive( false );
 		}
 	}
+
+	[DllImport("__Internal")]
+	private static extern void openWindow(string url);
 }
