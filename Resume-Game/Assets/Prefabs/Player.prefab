@@ -117,6 +117,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  collectibleCounter: 0
+  gemCounterText: {fileID: 0}
+  gemUIDisplay: {fileID: 0}
 --- !u!212 &212668111696399334
 SpriteRenderer:
   m_ObjectHideFlags: 1

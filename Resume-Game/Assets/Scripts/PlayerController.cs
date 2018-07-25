@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : PhysicsObject {
 	public float jumpTakeOffSpeed = 7f;
@@ -8,6 +9,8 @@ public class PlayerController : PhysicsObject {
 	public Cinemachine.CinemachineVirtualCamera upperCam;
 	public GameObject[ ] boxes = new GameObject[ 3 ];
 	public float collectibleCounter;
+	public Text gemCounterText;
+	public GameObject gemUIDisplay;
 
 	private SpriteRenderer sr;
 	private Animator animator;
@@ -73,7 +76,9 @@ public class PlayerController : PhysicsObject {
 			}
 		}
 		else if( other.tag == "Collectible" ) {
+			Destroy( other.GetComponent<Collider2D>( ) );
 			collectibleCounter++;
+			gemCounterText.text = collectibleCounter + "/5";
 			other.GetComponent<Animator>( ).SetTrigger( "gemTaken" );
 			Destroy( other.gameObject, 0.6f );
 
@@ -82,6 +87,9 @@ public class PlayerController : PhysicsObject {
 					Destroy( boxes[ i ] );
 				}
 			}
+		}
+		else if( other.tag == "UIDisplay" ) {
+			gemUIDisplay.SetActive( true );
 		}
 	}
 
