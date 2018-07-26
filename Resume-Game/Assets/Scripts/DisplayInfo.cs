@@ -85,6 +85,38 @@ public class DisplayInfo : MonoBehaviour {
 						txt = "Coming Soon";
 					}
 					break;
+
+					case "SpanishIcon": {
+						#if !UNITY_EDITOR
+						openWindow( "https://github.com/McDrak/mcdrak.github.io/blob/master/docs/CV_ES_Alejandro_Guayara.pdf" );
+						#endif
+						displayInfo = false;
+					}
+					break;
+
+					case "EnglishIcon": {
+						#if !UNITY_EDITOR
+						openWindow( "https://github.com/McDrak/mcdrak.github.io/blob/master/docs/CV_EN_Alejandro_Guayara.pdf" );
+						#endif
+						displayInfo = false;
+					}
+					break;
+
+					case "GithubIcon": {
+						#if !UNITY_EDITOR
+						openWindow( "https://github.com/McDrak" );
+						#endif
+						displayInfo = false;
+					}
+					break;
+
+					case "LinkedinIcon": {
+						#if !UNITY_EDITOR
+						openWindow( "https://www.linkedin.com/in/alejandro-guayara" );
+						#endif
+						displayInfo = false;
+					}
+					break;
 				}
 			}
 			else {

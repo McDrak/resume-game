@@ -8,7 +8,6 @@ public class PlayerController : PhysicsObject {
 	public float maxSpeed = 7f;
 	public Cinemachine.CinemachineVirtualCamera upperCam;
 	public GameObject[ ] boxes = new GameObject[ 3 ];
-	public float collectibleCounter;
 	public Text gemCounterText;
 	public GameObject gemUIDisplay;
 
@@ -17,6 +16,7 @@ public class PlayerController : PhysicsObject {
 	private bool canDoubleJump;
 	private Vector2 lastCheckpoint;
 	private bool canRaise;
+	private float collectibleCounter;
 
 	void Awake( ) {
 		sr = GetComponent<SpriteRenderer>( );
@@ -76,9 +76,10 @@ public class PlayerController : PhysicsObject {
 			}
 		}
 		else if( other.tag == "Collectible" ) {
-			Destroy( other.GetComponent<Collider2D>( ) );
 			collectibleCounter++;
 			gemCounterText.text = collectibleCounter + "/5";
+
+			Destroy( other.GetComponent<Collider2D>( ) );
 			other.GetComponent<Animator>( ).SetTrigger( "gemTaken" );
 			Destroy( other.gameObject, 0.6f );
 
